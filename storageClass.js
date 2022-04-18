@@ -3,8 +3,14 @@ class Storage {
 
     constructor(name, storageType = 'local') {
         this.name = name;
-        this.storage = (storageType === 'local') ? localStorage :
-                       (storageType === 'session') ? sessionStorage : alert('Wrong storage type');
+
+        if (storageType === 'local') {
+            this.storage = localStorage;
+        } else if (storageType === 'session') {
+            this.storage = sessionStorage;
+        } else {
+            alert('Wrong storage type');
+        }
 
         this.storage.setItem(this.name, JSON.stringify(this.defaultValue));
     }
@@ -22,10 +28,9 @@ class Storage {
     }
 
     isEmpty() {
-        const value = this.storage.getItem(this.name);
-        const isEmpty = (value !== null && value !== undefined) ? false : true;
-
-        return isEmpty;
+        const value = this.get();
+        
+        return !value;
     }
 }
 
@@ -33,7 +38,7 @@ const names = new Storage('names');
 names.set('0');
 
 alert(names.get());
-names.clear();
+// names.clear();
 alert(names.isEmpty());
 
 const names2 = new Storage('names2', 'sessio');
